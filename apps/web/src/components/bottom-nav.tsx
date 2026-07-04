@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Database, Target } from "lucide-react";
+import { Radar, Target } from "lucide-react";
 
 const tabs = [
 	{ to: "/", label: "捕获", icon: Target },
-	{ to: "/library", label: "痛点库", icon: Database },
+	{ to: "/library", label: "痛点库", icon: Radar },
 ] as const;
 
 export function BottomNav({ active }: { active: "/" | "/library" | null }) {

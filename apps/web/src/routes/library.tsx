@@ -1,13 +1,12 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
-	ArrowRight,
 	CircleAlert,
 	History,
 	Lightbulb,
 	MapPin,
-	Radar,
 	Search,
 	Sparkles,
+	Target,
 } from "lucide-react";
 
 import { BottomNav } from "@/components/bottom-nav";
@@ -20,7 +19,6 @@ export const Route = createFileRoute("/library")({
 const stats = [
 	{ label: "总记录", value: "128", tone: "text-primary" },
 	{ label: "高影响", value: "14", tone: "text-tertiary" },
-	{ label: "周环比", value: "+12%", tone: "text-secondary", glow: true },
 ] as const;
 
 const tagTone: Record<PainPoint["tags"][number]["tone"], string> = {
@@ -42,8 +40,8 @@ function LibraryScreen() {
 		<div className="flex min-h-svh flex-col bg-background text-foreground">
 			<header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-white/10 border-b bg-background/80 px-5 backdrop-blur-xl">
 				<div className="flex items-center gap-3">
-					<Radar className="size-6 text-primary" />
-					<h1 className="font-bold text-[28px] text-primary tracking-tight">
+					<Target className="size-6 text-primary" />
+					<h1 className="font-semibold text-2xl text-primary tracking-tight">
 						痛点库
 					</h1>
 				</div>
@@ -51,12 +49,10 @@ function LibraryScreen() {
 
 			<main className="mx-auto w-full max-w-2xl flex-1 space-y-6 px-5 py-8">
 				<section className="space-y-2">
-					<div className="mt-4 flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none]">
+					<div className="mt-4 flex flex-wrap gap-4 pb-2">
 						{stats.map((stat) => (
 							<div
-								className={`glass-card flex min-w-[120px] flex-col rounded-xl px-4 py-3 ${
-									"glow" in stat && stat.glow ? "ring-1 ring-primary/20" : ""
-								}`}
+								className="glass-card flex flex-1 flex-col rounded-xl px-4 py-3"
 								key={stat.label}
 							>
 								<span className="mb-1 font-label text-[10px] text-on-surface-variant uppercase tracking-[0.1em]">
@@ -113,7 +109,6 @@ function LibraryScreen() {
 			</main>
 
 			<BottomNav active="/library" />
-			<Outlet />
 		</div>
 	);
 }
@@ -148,14 +143,6 @@ function PainPointCard({ point }: { point: PainPoint }) {
 						{point.footer.label}
 					</span>
 				</div>
-				<Link
-					aria-label={`查看详情：${point.footer.label}`}
-					className="text-on-surface-variant transition-colors group-hover:text-primary"
-					params={{ id: point.id }}
-					to="/library/$id"
-				>
-					<ArrowRight className="size-4.5" />
-				</Link>
 			</div>
 		</article>
 	);

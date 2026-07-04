@@ -1,3 +1,35 @@
+# PainRadar 项目说明
+
+## 产品概述
+
+PainRadar 是一款面向创业者、产品经理、独立开发者和行业研究者的痛点捕获与机会洞察工具。产品将用户日常遇到的抱怨、摩擦和不便沉淀为结构化痛点库，并通过行业趋势、周期性模式和 AI 洞察帮助用户识别潜在市场机会。
+
+## 云端资源与技术栈
+
+本次项目主要以 AWS 云端资源为主。主要技术栈参考 ProcessOn 架构图：https://www.processon.com/view/link/62e77f4f7d9c08072e6eea09
+
+## 架构资源
+
+本项目架构涉及以下 AWS 云端资源：
+
+- IAM Identity Center：用于集中管理员工、开发者或运维人员的单点登录与账号访问权限。
+- API Gateway：用于对外暴露后端 API，统一处理接口路由、鉴权、限流和请求转发。
+- Amazon EventBridge：用于事件驱动架构，连接不同服务之间的异步事件流转。
+- Key Management Service：用于创建和管理加密密钥，保护数据库、存储和应用中的敏感数据。
+- Lightsail：用于快速部署轻量级服务器、数据库或小型应用环境。
+- Secrets Manager：用于安全存储和轮换数据库密码、API Key 等敏感配置。
+- Aurora and RDS：用于托管关系型数据库，承载业务数据、用户数据和痛点记录。
+- EC2：用于运行自定义后端服务、任务进程或需要完整服务器控制权的工作负载。
+- VPC：用于隔离和管理云上网络环境，配置子网、路由、安全组和私有访问。
+- AWS Amplify：用于托管前端应用，并支持前端构建、部署和环境管理。
+- IAM：用于管理 AWS 资源访问权限、角色和策略。
+- CloudFront：用于 CDN 加速，提升静态资源和前端页面的全球访问速度。
+- Route 53：用于域名解析、DNS 管理和流量路由。
+- S3：用于存储静态资源、上传文件、备份数据或前端构建产物。
+- Lambda：用于运行无服务器函数，处理轻量级后端逻辑、异步任务和事件响应。
+
+---
+
 # Ultracite Code Standards
 
 This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
