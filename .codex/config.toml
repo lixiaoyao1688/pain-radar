@@ -13,3 +13,9 @@ args = ["-y", "shadcn@latest", "mcp"]
 [mcp_servers.better-auth]
 type = "http"
 url = "https://mcp.inkeep.com/better-auth/mcp"
+
+[mcp_servers.stitch]
+url = "https://stitch.googleapis.com/mcp"
+
+[mcp_servers.stitch.http_headers]
+"X-Goog-Api-Key" = "${STITCH_API_KEY}"
