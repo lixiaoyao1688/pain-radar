@@ -1,0 +1,28 @@
+{
+  "name": "@pain-radar/api",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@pain-radar/auth": "workspace:*",
+    "@pain-radar/db": "workspace:*",
+    "@pain-radar/env": "workspace:*",
+    "@prisma/client": "catalog:",
+    "@trpc/client": "catalog:",
+    "@trpc/server": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@pain-radar/config": "workspace:*",
+    "hono": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@pain-radar/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@pain-radar/db": "workspace:*",
+    "@pain-radar/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@pain-radar/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
