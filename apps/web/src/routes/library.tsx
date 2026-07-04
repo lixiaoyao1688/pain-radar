@@ -2,12 +2,9 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import {
 	ArrowRight,
 	CircleAlert,
-	CircleUserRound,
 	History,
 	Lightbulb,
-	ListFilter,
 	MapPin,
-	Plus,
 	Radar,
 	Search,
 	Sparkles,
@@ -47,35 +44,13 @@ function LibraryScreen() {
 				<div className="flex items-center gap-3">
 					<Radar className="size-6 text-primary" />
 					<h1 className="font-bold text-[28px] text-primary tracking-tight">
-						库
+						痛点库
 					</h1>
-				</div>
-				<div className="flex items-center gap-4">
-					<button
-						aria-label="搜索"
-						className="transition-opacity duration-200 hover:opacity-80 active:scale-95"
-						type="button"
-					>
-						<Search className="size-6 text-on-surface-variant" />
-					</button>
-					<button
-						aria-label="账户"
-						className="transition-opacity duration-200 hover:opacity-80 active:scale-95"
-						type="button"
-					>
-						<CircleUserRound className="size-6 text-primary" />
-					</button>
 				</div>
 			</header>
 
 			<main className="mx-auto w-full max-w-2xl flex-1 space-y-6 px-5 py-8">
 				<section className="space-y-2">
-					<p className="font-label text-tertiary text-xs uppercase tracking-[0.2em]">
-						知识库洞察
-					</p>
-					<h2 className="font-semibold text-2xl text-on-surface">
-						已存储的观测
-					</h2>
 					<div className="mt-4 flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none]">
 						{stats.map((stat) => (
 							<div
@@ -97,16 +72,13 @@ function LibraryScreen() {
 
 				<div className="flex items-center gap-3">
 					<div className="flex flex-1 items-center gap-2 rounded-full border border-white/5 bg-surface-container-low px-4 py-2">
-						<ListFilter className="size-4 text-on-surface-variant" />
-						<span className="text-on-surface-variant text-sm">按时间排序</span>
+						<Search className="size-4 text-on-surface-variant" />
+						<input
+							className="w-full bg-transparent text-on-surface text-sm placeholder:text-on-surface-variant focus:outline-none"
+							placeholder="请输入"
+							type="search"
+						/>
 					</div>
-					<Link
-						aria-label="记录新痛点"
-						className="flex size-10 items-center justify-center rounded-full bg-primary-container text-on-primary-container transition-transform active:scale-90"
-						to="/"
-					>
-						<Plus className="size-5" />
-					</Link>
 				</div>
 
 				<section className="space-y-3">
