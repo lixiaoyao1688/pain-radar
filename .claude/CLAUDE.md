@@ -156,3 +156,7 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 ---
 
 Most formatting and common issues are automatically fixed by Biome. Run `pnpm dlx ultracite fix` before committing to ensure compliance.
+
+## Environment Variables
+
+开发时需要的参数（数据库连接、密钥、第三方服务配置等）直接写入 `.env` / `.env.example` 占位即可，不要因缺少真实值而阻塞开发；真实值由用户自行填写。新增变量同步到 `packages/env` 的 schema。

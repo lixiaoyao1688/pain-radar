@@ -156,3 +156,7 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 ---
 
 Most formatting and common issues are automatically fixed by Biome. Run `pnpm dlx ultracite fix` before committing to ensure compliance.
+
+## 环境变量约定
+
+开发过程中如果需要新的配置参数（数据库连接、密钥、第三方服务地址等），直接在对应的 `.env` / `.env.example` 中写入**占位值**即可（如 `DATABASE_URL=postgresql://user:pass@localhost:5432/painradar`、`SOME_API_KEY=placeholder`），不要因缺少真实值而阻塞开发；真实值由用户后续自行填写。新增变量记得同步到 `packages/env` 的 schema 中。

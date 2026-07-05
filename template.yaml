@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: PainRadar server (Hono + tRPC + better-auth) on Lambda + API Gateway
+
+Parameters:
+  DatabaseUrl:
+    Type: String
+    NoEcho: true
+    Default: postgresql://user:pass@localhost:5432/painradar # 占位值，部署时通过 GitHub Secrets 覆盖
+  CorsOrigin:
+    Type: String
+    Default: http://localhost:3002
+  BetterAuthSecret:
+    Type: String
+    NoEcho: true
+    Default: placeholder-better-auth-secret
+  BetterAuthUrl:
+    Type: String
+    Default: http://localhost:3000
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Timeout: 30
+    MemorySize: 512
+    Architectures:
+      - arm64
+
+Resources:
+  ServerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda.handler
+      CodeUri: apps/server
+      Environment:
+        Variables:
+          DATABASE_URL: !Ref DatabaseUrl
+          CORS_ORIGIN: !Ref CorsOrigin
+          BETTER_AUTH_SECRET: !Ref BetterAuthSecret
+          BETTER_AUTH_URL: !Ref BetterAuthUrl
+      Events:
+        Root:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+        Proxy:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        EntryPoints:
+          - src/lambda.ts
+        Target: es2022
+        Format: esm
+        OutExtension:
+          - .js=.mjs
+        Minify: false
+        External:
+          - "@aws-sdk/*"
+        Banner:
+          - js=import { createRequire } from "module"; const require = createRequire(import.meta.url);
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
