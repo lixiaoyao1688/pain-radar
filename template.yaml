@@ -17,6 +17,15 @@ Parameters:
   BetterAuthUrl:
     Type: String
     Default: http://localhost:3000
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Default: vpc-045a9dc5c6992083c
+  LambdaSubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+    Default: subnet-0d122b5c37cbe9c43,subnet-06d680b15888e262f
+  DatabaseSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Default: sg-0650c5afaaf0f1dd6
 
 Globals:
   Function:
@@ -27,11 +36,36 @@ Globals:
       - arm64
 
 Resources:
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow PainRadar Lambda to reach the database
+      VpcId: !Ref VpcId
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+
+  DatabaseIngressFromLambda:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Allow PostgreSQL traffic from PainRadar Lambda
+      GroupId: !Ref DatabaseSecurityGroupId
+      IpProtocol: tcp
+      FromPort: 5432
+      ToPort: 5432
+      SourceSecurityGroupId: !Ref LambdaSecurityGroup
+
   ServerFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda.handler
       CodeUri: apps/server
+      Policies:
+        - AWSLambdaVPCAccessExecutionRole
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds: !Ref LambdaSubnetIds
       Environment:
         Variables:
           DATABASE_URL: !Ref DatabaseUrl

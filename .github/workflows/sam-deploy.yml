@@ -24,6 +24,9 @@ jobs:
       CORS_ORIGIN: ${{ vars.CORS_ORIGIN || 'http://localhost:3002' }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL || 'http://localhost:3000' }}
+      VPC_ID: ${{ vars.VPC_ID || 'vpc-045a9dc5c6992083c' }}
+      LAMBDA_SUBNET_IDS: ${{ vars.LAMBDA_SUBNET_IDS || 'subnet-0d122b5c37cbe9c43,subnet-06d680b15888e262f' }}
+      DATABASE_SECURITY_GROUP_ID: ${{ vars.DATABASE_SECURITY_GROUP_ID || 'sg-0650c5afaaf0f1dd6' }}
       NODE_OPTIONS: --max-old-space-size=6144
     steps:
       - name: Checkout
@@ -77,4 +80,7 @@ jobs:
               DatabaseUrl="$DATABASE_URL" \
               CorsOrigin="$CORS_ORIGIN" \
               BetterAuthSecret="$BETTER_AUTH_SECRET" \
-              BetterAuthUrl="$BETTER_AUTH_URL"
+              BetterAuthUrl="$BETTER_AUTH_URL" \
+              VpcId="$VPC_ID" \
+              LambdaSubnetIds="$LAMBDA_SUBNET_IDS" \
+              DatabaseSecurityGroupId="$DATABASE_SECURITY_GROUP_ID"
