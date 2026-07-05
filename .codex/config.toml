@@ -19,3 +19,8 @@ url = "https://stitch.googleapis.com/mcp"
 
 [mcp_servers.stitch.http_headers]
 "X-Goog-Api-Key" = "${STITCH_API_KEY}"
+
+[mcp_servers.aws-api]
+command = "uvx"
+args = ["awslabs.aws-api-mcp-server@latest"]
+env = { AWS_PROFILE = "AdministratorAccess-148286034169", AWS_REGION = "ap-northeast-1" }

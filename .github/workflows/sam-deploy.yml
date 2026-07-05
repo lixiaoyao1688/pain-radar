@@ -19,6 +19,11 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CORS_ORIGIN: ${{ vars.CORS_ORIGIN || 'http://localhost:3002' }}
+      BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+      BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL || 'http://localhost:3000' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -69,7 +74,7 @@ jobs:
             --no-fail-on-empty-changeset \
             --region "$AWS_REGION" \
             --parameter-overrides \
-              DatabaseUrl="${{ secrets.DATABASE_URL }}" \
-              CorsOrigin="${{ vars.CORS_ORIGIN || 'http://localhost:3002' }}" \
-              BetterAuthSecret="${{ secrets.BETTER_AUTH_SECRET }}" \
-              BetterAuthUrl="${{ vars.BETTER_AUTH_URL || 'http://localhost:3000' }}"
+              DatabaseUrl="$DATABASE_URL" \
+              CorsOrigin="$CORS_ORIGIN" \
+              BetterAuthSecret="$BETTER_AUTH_SECRET" \
+              BetterAuthUrl="$BETTER_AUTH_URL"
