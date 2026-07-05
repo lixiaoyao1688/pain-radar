@@ -160,3 +160,11 @@ Most formatting and common issues are automatically fixed by Biome. Run `pnpm dl
 ## 环境变量约定
 
 开发过程中如果需要新的配置参数（数据库连接、密钥、第三方服务地址等），直接在对应的 `.env` / `.env.example` 中写入**占位值**即可（如 `DATABASE_URL=postgresql://user:pass@localhost:5432/painradar`、`SOME_API_KEY=placeholder`），不要因缺少真实值而阻塞开发；真实值由用户后续自行填写。新增变量记得同步到 `packages/env` 的 schema 中。
+
+---
+
+# 项目踩坑与教训(AGENTS.md)
+
+- [T-001] 本地 PostgreSQL 环境坑：本机默认无 PostgreSQL 也无 Docker，本地开发库是通过 Homebrew 安装 postgresql@16 并用 `brew services start postgresql@16` 常驻启动的；这不是项目原生依赖，CI/云端环境请用 Docker 容器或 RDS/Aurora，不要假设目标机器上有 brew 服务。
+- [T-001] DATABASE_URL 匹配坑：Homebrew 安装的 PostgreSQL 默认超级用户是当前 macOS 用户名且无 `postgres` 角色，为匹配 `.env` 中 `postgres:password@localhost:5432` 的 DATABASE_URL，本地手动创建了 `postgres` 超级用户（密码 `password`，仅限本机开发库）。新机器跑 `prisma migrate` 前需先复现该角色，或改 `.env` 指向已有用户，否则会连接认证失败。
+- [T-001] Prisma migrate 前置步骤：跑 `prisma migrate dev` 之前必须先确认数据库进程存活且 DATABASE_URL 可连通（如 `psql $DATABASE_URL -c 'select 1'`），migration 文件位于 `packages/db/prisma/migrations/`。

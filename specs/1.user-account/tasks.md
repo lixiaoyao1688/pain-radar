@@ -16,7 +16,7 @@
 
 ### 功能 1: 认证基础设施
 
-- [ ] T-001: 核验 DATABASE_URL 与 PostgreSQL 连通，执行 prisma migrate 应用 auth 模型 ~15min
+- [x] T-001: 核验 DATABASE_URL 与 PostgreSQL 连通，执行 prisma migrate 应用 auth 模型 ~15min
 - [ ] T-002: 起 server+web，验证 better-auth 端点连通（signUp/signIn/signOut 走通一遍），修复暴露的问题 ~30min
 
 ### 功能 2: 注册与登录（F-001, F-002, F-003）

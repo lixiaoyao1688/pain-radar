@@ -160,3 +160,54 @@ Most formatting and common issues are automatically fixed by Biome. Run `pnpm dl
 ## Environment Variables
 
 开发时需要的参数（数据库连接、密钥、第三方服务配置等）直接写入 `.env` / `.env.example` 占位即可，不要因缺少真实值而阻塞开发；真实值由用户自行填写。新增变量同步到 `packages/env` 的 schema。
+
+---
+
+## 技术栈
+
+- 语言：TypeScript（monorepo：Turborepo + pnpm workspaces，pnpm@10.12.1）
+- 前端：React 19 + Vite + TanStack Router/Query + Tailwind CSS v4
+- 后端：Hono + tRPC + Better Auth
+- 数据库：Prisma 7 + PostgreSQL
+- 文档站：Astro Starlight
+- 部署：AWS SAM（`template.yaml` / `samconfig.toml`），前端配合 AWS 托管资源
+
+## 常用命令
+
+- 安装依赖：`pnpm install`
+- 本地开发：`pnpm dev`（或 `pnpm dev:web` / `pnpm dev:server`）
+- 构建：`pnpm build`
+- Lint / 格式化：`pnpm check`（检查）、`pnpm fix`（自动修复，ultracite/Biome）
+- 测试：暂未配置测试脚本
+
+## 目录结构
+
+```
+pain-radar/
+├── apps/
+│   ├── web/        # 前端（React 19 + Vite + TanStack Router/Query）
+│   ├── server/     # 后端（Hono + tRPC + Better Auth）
+│   └── docs/       # 文档站（Astro Starlight）
+├── packages/
+│   ├── api/        # tRPC router / API 共享层
+│   ├── auth/       # Better Auth 配置
+│   ├── db/         # Prisma schema 与数据库客户端
+│   ├── env/        # 环境变量 schema（新增 env 需同步这里）
+│   ├── ui/         # 共享 UI 组件
+│   └── config/     # 共享配置
+├── specs/          # 需求 / 设计 / 任务规格
+├── template.yaml   # AWS SAM 模板
+└── turbo.json      # Turborepo 任务管道
+```
+
+## 模块规则（按需引入）
+
+涉及对应模块开发时，先阅读相应规则文件：
+
+- 前端（apps/web、packages/ui）：@rules/frontend.md
+- 后端（apps/server、packages/api、packages/auth）：@rules/backend.md
+- 数据库（packages/db、Prisma migration）：@rules/database.md
+
+## 项目踩坑与教训
+
+@AGENTS.md
