@@ -1,3 +1,3 @@
 build-ServerFunction:
-	cd ../.. && pnpm --filter server build
+	test -f dist/lambda.mjs
 	cp -R dist/. "$(ARTIFACTS_DIR)/"

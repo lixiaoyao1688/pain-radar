@@ -24,6 +24,7 @@ jobs:
       CORS_ORIGIN: ${{ vars.CORS_ORIGIN || 'http://localhost:3002' }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL || 'http://localhost:3000' }}
+      NODE_OPTIONS: --max-old-space-size=6144
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,9 +44,8 @@ jobs:
       - name: Type check
         run: pnpm check-types
 
-      # sam build 的 esbuild 构建器需要能找到 esbuild
-      - name: Install esbuild
-        run: npm install -g esbuild
+      - name: Build server bundle
+        run: pnpm --filter server build
 
       - name: Setup AWS SAM CLI
         uses: aws-actions/setup-sam@v2
