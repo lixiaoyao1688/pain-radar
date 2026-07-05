@@ -8,5 +8,8 @@ export default defineConfig({
 	format: "esm",
 	outDir: "./dist",
 	clean: true,
-	noExternal: [/@pain-radar\/.*/],
+	deps: {
+		alwaysBundle: (id) => !id.startsWith("node:"),
+		onlyBundle: false,
+	},
 });

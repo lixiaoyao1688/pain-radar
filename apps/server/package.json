@@ -12,6 +12,7 @@
   "dependencies": {
     "@hono/node-server": "^1.14.4",
     "@hono/trpc-server": "^0.4.0",
+    "@opentelemetry/api": "^1.9.1",
     "@pain-radar/api": "workspace:*",
     "@pain-radar/auth": "workspace:*",
     "@pain-radar/db": "workspace:*",
