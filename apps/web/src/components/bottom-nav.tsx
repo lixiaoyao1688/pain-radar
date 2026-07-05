@@ -1,12 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { Radar, Target } from "lucide-react";
+import { CircleUserRound, Radar, Target } from "lucide-react";
 
 const tabs = [
 	{ to: "/", label: "捕获", icon: Target },
 	{ to: "/library", label: "痛点库", icon: Radar },
+	{ to: "/profile", label: "我的", icon: CircleUserRound },
 ] as const;
 
-export function BottomNav({ active }: { active: "/" | "/library" | null }) {
+export function BottomNav({
+	active,
+}: {
+	active: "/" | "/library" | "/profile" | null;
+}) {
 	return (
 		<nav className="fixed bottom-0 z-50 flex h-20 w-full items-center justify-around rounded-t-xl border-white/10 border-t bg-surface-container/80 px-4 pb-[env(safe-area-inset-bottom)] shadow-lg backdrop-blur-3xl">
 			{tabs.map(({ to, label, icon: Icon }) => {
