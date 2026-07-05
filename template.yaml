@@ -50,19 +50,7 @@ Resources:
             Path: /{proxy+}
             Method: ANY
     Metadata:
-      BuildMethod: esbuild
-      BuildProperties:
-        EntryPoints:
-          - src/lambda.ts
-        Target: es2022
-        Format: esm
-        OutExtension:
-          - .js=.mjs
-        Minify: false
-        External:
-          - "@aws-sdk/*"
-        Banner:
-          - js=import { createRequire } from "module"; const require = createRequire(import.meta.url);
+      BuildMethod: makefile
 
 Outputs:
   ApiUrl:
