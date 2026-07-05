@@ -205,8 +205,12 @@ pain-radar/
 涉及对应模块开发时，先阅读相应规则文件：
 
 - 前端（apps/web、packages/ui）：@rules/frontend.md
-- 后端（apps/server、packages/api、packages/auth）：@rules/backend.md
+- 后端（apps/server、packages/api、packages/auth）：@rules/backend-api.md
 - 数据库（packages/db、Prisma migration）：@rules/database.md
+- 编码风格（全仓通用）：@rules/coding-style.md
+- Git 工作流（分支/提交/PR）：@rules/git-workflow.md
+- 测试（新增测试时）：@rules/testing.md
+- 安全（密钥/鉴权/部署）：@rules/security.md
 
 ## 项目踩坑与教训
 

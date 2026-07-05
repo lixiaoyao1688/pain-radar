@@ -8,6 +8,7 @@ import z from "zod";
 import { RadarLogo } from "@/components/radar-logo";
 import { toAccountEmail, usernameSchema } from "@/lib/account";
 import { authClient } from "@/lib/auth-client";
+import { getAuthErrorMessage } from "@/lib/auth-error";
 
 import Loader from "./loader";
 
@@ -35,7 +36,7 @@ export default function SignInForm() {
 						toast.success("登录成功");
 					},
 					onError: (error) => {
-						toast.error(error.error.message || error.error.statusText);
+						toast.error(getAuthErrorMessage(error.error));
 					},
 				}
 			);

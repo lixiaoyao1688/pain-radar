@@ -15,6 +15,7 @@ import z from "zod";
 
 import { toAccountEmail, usernameSchema } from "@/lib/account";
 import { authClient } from "@/lib/auth-client";
+import { getAuthErrorMessage } from "@/lib/auth-error";
 
 import Loader from "./loader";
 
@@ -43,7 +44,7 @@ export default function SignUpForm() {
 						toast.success("注册成功");
 					},
 					onError: (error) => {
-						toast.error(error.error.message || error.error.statusText);
+						toast.error(getAuthErrorMessage(error.error));
 					},
 				}
 			);
