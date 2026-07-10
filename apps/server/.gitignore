@@ -46,6 +46,7 @@ lerna-debug.log*
 # misc
 .DS_Store
 *.pem
+!ap-northeast-1-bundle.pem
 
 # local db
 *.db*

@@ -6,7 +6,7 @@ Parameters:
   DatabaseUrl:
     Type: String
     NoEcho: true
-    Default: postgresql://user:pass@localhost:5432/painradar # 占位值，部署时通过 GitHub Secrets 覆盖
+    Default: postgresql://user:pass@localhost:5432/painradar?schema=public&sslmode=require # 占位值，部署时通过 GitHub Secrets 覆盖
   CorsOrigin:
     Type: String
     Default: http://localhost:3002
@@ -17,6 +17,13 @@ Parameters:
   BetterAuthUrl:
     Type: String
     Default: http://localhost:3000
+  NodeEnv:
+    Type: String
+    Default: production
+    AllowedValues:
+      - development
+      - production
+      - test
   VpcId:
     Type: AWS::EC2::VPC::Id
     Default: vpc-045a9dc5c6992083c
@@ -72,6 +79,8 @@ Resources:
           CORS_ORIGIN: !Ref CorsOrigin
           BETTER_AUTH_SECRET: !Ref BetterAuthSecret
           BETTER_AUTH_URL: !Ref BetterAuthUrl
+          NODE_ENV: !Ref NodeEnv
+          NODE_EXTRA_CA_CERTS: /var/task/ap-northeast-1-bundle.pem
       Events:
         Root:
           Type: HttpApi
