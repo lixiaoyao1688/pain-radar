@@ -125,3 +125,5 @@ pain-radar/
 - `pnpm run check`：运行 Biome 格式化和代码检查
 - `cd apps/docs && pnpm run dev`：启动文档站点
 - `cd apps/docs && pnpm run build`：构建文档站点
+
+测试
