@@ -20,7 +20,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL_SECRET_ID: ${{ vars.DATABASE_URL_SECRET_ID || 'pain-radar/database-url' }}
       CORS_ORIGIN: ${{ vars.CORS_ORIGIN || 'http://localhost:3002' }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL || 'http://localhost:3000' }}
@@ -64,6 +64,28 @@ jobs:
           # 推荐改用 OIDC（免长期密钥）：删除上面两行 access key，
           # 换成 role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/<DEPLOY_ROLE>
 
+      - name: Load database URL
+        run: |
+          raw_url="$(aws secretsmanager get-secret-value \
+            --secret-id "$DATABASE_URL_SECRET_ID" \
+            --region "$AWS_REGION" \
+            --query SecretString \
+            --output text)"
+
+          RAW_DATABASE_URL="$raw_url" node - <<'NODE' >> "$GITHUB_ENV"
+          const rawUrl = process.env.RAW_DATABASE_URL;
+          if (!rawUrl) {
+            throw new Error("Database URL secret is empty");
+          }
+
+          const url = new URL(rawUrl);
+          url.pathname = "/pain_radar_db";
+          url.searchParams.set("schema", "public");
+          url.searchParams.set("sslmode", "require");
+
+          console.log(`DEPLOY_DATABASE_URL=${url.toString()}`);
+          NODE
+
       - name: SAM validate
         run: sam validate
 
@@ -77,10 +99,11 @@ jobs:
             --no-fail-on-empty-changeset \
             --region "$AWS_REGION" \
             --parameter-overrides \
-              DatabaseUrl="$DATABASE_URL" \
+              DatabaseUrl="$DEPLOY_DATABASE_URL" \
               CorsOrigin="$CORS_ORIGIN" \
               BetterAuthSecret="$BETTER_AUTH_SECRET" \
               BetterAuthUrl="$BETTER_AUTH_URL" \
+              NodeEnv="production" \
               VpcId="$VPC_ID" \
               LambdaSubnetIds="$LAMBDA_SUBNET_IDS" \
               DatabaseSecurityGroupId="$DATABASE_SECURITY_GROUP_ID"
