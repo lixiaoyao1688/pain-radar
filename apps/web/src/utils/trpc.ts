@@ -1,9 +1,10 @@
 import type { AppRouter } from "@pain-radar/api/routers/index";
-import { env } from "@pain-radar/env/web";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { toast } from "sonner";
+
+import { serverUrl } from "@/lib/server-url";
 
 export const queryClient = new QueryClient({
 	queryCache: new QueryCache({
@@ -23,7 +24,7 @@ export const queryClient = new QueryClient({
 export const trpcClient = createTRPCClient<AppRouter>({
 	links: [
 		httpBatchLink({
-			url: `${env.VITE_SERVER_URL}/trpc`,
+			url: `${serverUrl}/trpc`,
 			fetch(url, options) {
 				return fetch(url, {
 					...options,
