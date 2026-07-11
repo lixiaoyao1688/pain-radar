@@ -1,0 +1,10 @@
+model PainPoint {
+  id        Int      @id @default(autoincrement())
+  text      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("pain_point")
+}

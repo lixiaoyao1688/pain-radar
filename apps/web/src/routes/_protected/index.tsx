@@ -1,9 +1,11 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, PencilLine, Save } from "lucide-react";
-import { useState } from "react";
+import { ChevronRight, Loader2, PencilLine, Save } from "lucide-react";
+import { type FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 import { BottomNav } from "@/components/bottom-nav";
+import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/_protected/")({
 	component: CaptureScreen,
@@ -11,14 +13,37 @@ export const Route = createFileRoute("/_protected/")({
 
 function CaptureScreen() {
 	const [draft, setDraft] = useState("");
+	const queryClient = useQueryClient();
+	const createPainPoint = useMutation(
+		trpc.painPoint.create.mutationOptions({
+			onSuccess: async () => {
+				setDraft("");
+				await Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: trpc.painPoint.list.queryKey(),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: trpc.painPoint.count.queryKey(),
+					}),
+				]);
+				toast.success("已保存到你的痛点库");
+			},
+			onError: (error) => {
+				toast.error(error.message || "保存失败，请稍后重试");
+			},
+		})
+	);
 
-	const savePainPoint = () => {
-		if (!draft.trim()) {
+	const savePainPoint = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const text = draft.trim();
+
+		if (!text) {
 			toast.warning("先写下一个让你烦恼的问题吧");
 			return;
 		}
-		setDraft("");
-		toast.success("已保存到你的痛点库");
+
+		createPainPoint.mutate({ text });
 	};
 
 	return (
@@ -34,10 +59,12 @@ function CaptureScreen() {
 					</span>
 				</h1>
 
-				<div className="w-full space-y-4 px-2">
+				<form className="w-full space-y-4 px-2" onSubmit={savePainPoint}>
 					<div className="group relative">
 						<textarea
 							className="glass-card w-full resize-none rounded-xl p-4 pr-12 text-base text-on-surface shadow-2xl transition-all placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-1 focus:ring-primary"
+							disabled={createPainPoint.isPending}
+							maxLength={2000}
 							onChange={(event) => setDraft(event.target.value)}
 							placeholder="记录你今天遇到的一个烦人问题或抱怨..."
 							rows={3}
@@ -50,13 +77,17 @@ function CaptureScreen() {
 
 					<button
 						className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 font-semibold text-2xl text-primary-foreground shadow-[0_0_20px_rgba(184,195,255,0.2)] transition-all duration-200 hover:bg-primary/90 active:scale-95"
-						onClick={savePainPoint}
-						type="button"
+						disabled={createPainPoint.isPending}
+						type="submit"
 					>
-						<Save className="size-6" />
-						保存这个痛点
+						{createPainPoint.isPending ? (
+							<Loader2 className="size-6 animate-spin" />
+						) : (
+							<Save className="size-6" />
+						)}
+						{createPainPoint.isPending ? "保存中..." : "保存这个痛点"}
 					</button>
-				</div>
+				</form>
 
 				<Link
 					className="mt-8 flex items-center gap-2 text-on-surface-variant transition-colors duration-200 hover:text-primary active:scale-95"

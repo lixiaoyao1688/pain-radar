@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { LogOut, Radar } from "lucide-react";
 import { toast } from "sonner";
@@ -5,6 +6,7 @@ import { toast } from "sonner";
 import { BottomNav } from "@/components/bottom-nav";
 import Loader from "@/components/loader";
 import { authClient } from "@/lib/auth-client";
+import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/_protected/profile")({
 	component: ProfileScreen,
@@ -13,6 +15,7 @@ export const Route = createFileRoute("/_protected/profile")({
 function ProfileScreen() {
 	const navigate = useNavigate({ from: "/profile" });
 	const { data: session, isPending } = authClient.useSession();
+	const painPointCount = useQuery(trpc.painPoint.count.queryOptions());
 
 	const signOut = async () => {
 		await authClient.signOut({
@@ -73,7 +76,9 @@ function ProfileScreen() {
 						<span className="font-label text-on-surface-variant text-xs uppercase tracking-[0.1em]">
 							捕获痛点
 						</span>
-						<span className="font-bold text-[32px] text-primary">124</span>
+						<span className="font-bold text-[32px] text-primary">
+							{painPointCount.isLoading ? "--" : (painPointCount.data ?? 0)}
+						</span>
 					</div>
 				</div>
 
