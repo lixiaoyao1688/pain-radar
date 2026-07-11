@@ -17,10 +17,26 @@ url = "https://mcp.inkeep.com/better-auth/mcp"
 [mcp_servers.stitch]
 url = "https://stitch.googleapis.com/mcp"
 
-[mcp_servers.stitch.http_headers]
-"X-Goog-Api-Key" = "${STITCH_API_KEY}"
+[mcp_servers.stitch.env_http_headers]
+"X-Goog-Api-Key" = "STITCH_API_KEY"
 
-[mcp_servers.aws-api]
+[mcp_servers.aws-mcp]
 command = "uvx"
-args = ["awslabs.aws-api-mcp-server@latest"]
-env = { AWS_PROFILE = "AdministratorAccess-148286034169", AWS_REGION = "ap-northeast-1" }
+args = [
+  "mcp-proxy-for-aws==1.6.2",
+  "https://aws-mcp.us-east-1.api.aws/mcp",
+  "--metadata",
+  "AWS_REGION=ap-northeast-1",
+]
+env = { AWS_MCP_PROXY_PROFILES = "AdministratorAccess-148286034169", HTTP_PROXY = "", HTTPS_PROXY = "", ALL_PROXY = "", http_proxy = "", https_proxy = "", all_proxy = "" }
+startup_timeout_sec = 60
+
+[mcp_servers.cloudflare-api]
+url = "https://mcp.cloudflare.com/mcp"
+auth = "oauth"
+
+[mcp_servers.cloudflare-docs]
+url = "https://docs.mcp.cloudflare.com/mcp"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
